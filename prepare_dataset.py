@@ -5,8 +5,6 @@ from math import floor
 from tqdm import tqdm
 import shutil
 
-print('qwrqrqwrqwrq')
-
 input_folders = [
     'datasets/flowers/daisy/',
     'datasets/flowers/dandelion/',
@@ -15,11 +13,11 @@ input_folders = [
     'datasets/flowers/tulips/'
 ]
 
-BASE_DIR_ABSOLUTE = "C:/python/neiro_training"
+BASE_DIR_ABSOLUTE = "/home/andrey/PycharmProjects/neiro_training"
 OUT_DIR = 'datasets/flowers_prepared/'
 
-OUT_TRAIN = OUT_DIR + 'train/'
-OUT_VAL = OUT_DIR + 'test/'
+OUT_TRAIN = os.path.join(OUT_DIR, 'train/')
+OUT_VAL = os.path.join(OUT_DIR, 'test/')
 
 coeff = [80, 20]
 exceptions = ['classes']
@@ -70,7 +68,7 @@ print("\nCopying TRAIN source items to prepared folder ...")
 for sk, sv in tqdm(train.items()):
     for item in tqdm(sv):
         imgfile_source = os.path.join(BASE_DIR_ABSOLUTE, sk, item)
-        imgfile_dest = os.path.join(BASE_DIR_ABSOLUTE, OUT_TRAIN, sk.split('/')[-2])
+        imgfile_dest = os.path.join(BASE_DIR_ABSOLUTE, OUT_TRAIN, os.path.basename(os.path.dirname(sk)))
 
         os.makedirs(imgfile_dest, exist_ok=True)
         shutil.copyfile(imgfile_source, os.path.join(imgfile_dest, item))
@@ -80,7 +78,7 @@ print("\nCopying VAL source items to prepared folder ...")
 for sk, sv in tqdm(val.items()):
     for item in tqdm(sv):
         imgfile_source = os.path.join(BASE_DIR_ABSOLUTE, sk, item)
-        imgfile_dest = os.path.join(BASE_DIR_ABSOLUTE, OUT_VAL, sk.split('/')[-2])
+        imgfile_dest = os.path.join(BASE_DIR_ABSOLUTE, OUT_VAL, os.path.basename(os.path.dirname(sk)))
 
         os.makedirs(imgfile_dest, exist_ok=True)
         shutil.copyfile(imgfile_source, os.path.join(imgfile_dest, item))
