@@ -5,10 +5,12 @@ import torch
 import datetime
 import logging
 import time
+import json
+import random
 
 logging.basicConfig(
     level=logging.DEBUG,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(message)s',  # Формат сообщения
+    format='%(message)s',  # Формат сообщения
     handlers=[
         logging.FileHandler("botlogger.log"),  # Логирование в файл
         logging.StreamHandler()  # Логирование в консоль
@@ -50,35 +52,17 @@ class ObjectDetection:
         self.start_square = 0
         self.data_of_bright = 0
         self.get_data_of_start_temperature()
-        self.get_start_temp()
+        self.get_start_square()
         self.get_start_brightness()
 
     def get_data_of_start_temperature(self):
-        while True:
-            print("Введите начальную температуру помещения в градусах цельсия: ", end='')
-            self.start_temp = int(input())
-            if self.start_temp < -50:
-                print("Неправильно введены данные, попробуйте снова")
-            else:
-                break
+        self.start_temp = random.randint(0, 30)
 
-    def get_start_temp(self):
-        while True:
-            print("Введите начальную площадь помещения в метрах квадратных: ", end='')
-            self.start_square = int(input())
-            if self.start_square <= 0:
-                print("Неверно указаны данные, введите снова")
-            else:
-                break
+    def get_start_square(self):
+        self.start_square = random.randint(10, 30)
 
     def get_start_brightness(self):
-        while True:
-            print("Введите начальную освещенность помещения в люксах: ", end='')
-            self.data_of_bright = int(input())
-            if self.data_of_bright < 0 or self.data_of_bright > 1000:
-                print("Неправильно введены данные, попробуйте снова")
-            else:
-                break
+        self.data_of_bright = random.randint(10, 500)
 
     def get_season(self):
         month = datetime.datetime.now().month
@@ -96,39 +80,39 @@ class ObjectDetection:
         if season == 'зима':
             if self.start_temp < 24:
                 self.temper = 24
-                print(f"Темпераратура на батареях: +{self.temper}")
+                # print(f"Темпераратура на батареях: +{self.temper}")
                 s = f"b{self.temper}"
             else:
-                print("Не нужно запускать повышение темппературы на батареях")
+                # print("Не нужно запускать повышение темппературы на батареях")
                 s = f"b-"
         elif season == 'осень' or season == 'весна':
             if self.start_temp < 15:
                 self.temper = 24
-                print(f"Темпераратура на батареях: +{self.temper}")
+                # print(f"Темпераратура на батареях: +{self.temper}")
                 s = f"b{self.temper}"
             elif self.start_temp > 24:
                 self.temper = 21
-                print(f"Темпераратура на кондиционере: +{self.temper}")
+                # print(f"Темпераратура на кондиционере: +{self.temper}")
                 s = f"c{self.temper}"
             else:
-                print("Ни батареи, ни кондиционер не нужно включать")
+                # print("Ни батареи, ни кондиционер не нужно включать")
                 s = f"bc-"
         else:
             if self.start_temp > 24:
                 self.temper = 24
-                print(f"Темпераратура на кондиционере: +{self.temper}")
+                # print(f"Темпераратура на кондиционере: +{self.temper}")
                 s = f"c {self.temper}"
             else:
-                print("Не нужно запускать понижение темппературы на кондиционере")
+                # print("Не нужно запускать понижение темппературы на кондиционере")
                 s = f"c-"
-        return s
+        return str(self.start_temp)
 
     def counting_power_of_vent(self):
         power = 2 * self.count_of_people
         if power > 100:
             power = 100
         s = str(power)
-        print(f"Мощность вентиляции: {power}%")
+        # print(f"Мощность вентиляции: {power}%")
         return s
 
     def calculate_lights(self):
@@ -136,10 +120,10 @@ class ObjectDetection:
             if 0 < self.data_of_bright < 500:
                 bright = (500 - self.data_of_bright)
                 s = str(bright)
-                print(f"Освещенность - {bright} Люкс, так как в аудитории есть {self.count_of_people} человек и освещенность в аудитории {self.data_of_bright} недостаточна")
+                # print(f"Освещенность - {bright} Люкс, так как в аудитории есть {self.count_of_people} человек и освещенность в аудитории {self.data_of_bright} недостаточна")
         else:
             s = str(0)
-            print("Освещенность - 0%, так как в аудитории никого нет")
+            # print("Освещенность - 0%, так как в аудитории никого нет")
         return s
 
     def exit_image(self):
@@ -157,16 +141,22 @@ class ObjectDetection:
                 im0 = self.region.count(im0)
                 results = self.model(im0)
                 self.count_of_people = self.process_results(results)
-                print(f"Количество людей: {self.count_of_people}")
+                # print(f"Количество людей: {self.count_of_people}")
 
                 time.sleep(0.05)
                 # Calculate temperature, ventilation, and lighting
                 self.s += self.calculate_temperature() + " "
                 self.s += self.counting_power_of_vent() + " "
-                self.s += self.calculate_lights()
-                print(self.s)
+                self.s += self.calculate_lights()+ " "
+                self.s += str(self.count_of_people)
+                print(self.save_to_json(self.s))
 
-                logger.info(self.s)
+
+                # logger.info(self.s)
+
+                # Save to JSON file
+
+
 
             except Exception as e:
                 print(f"Ошибка при обработке кадра: {e}")
@@ -186,6 +176,22 @@ class ObjectDetection:
                     person_count += 1
 
         return person_count
+
+    def save_to_json(self, data):
+        # Parse the data string into a dictionary
+        parts = data.split()
+        json_data = {
+            "temperature": parts[0],
+            "ventilation": parts[1],
+            "lighting": parts[2],
+            "people": parts[3]
+        }
+
+        # Save to JSON file
+        # with open("output.json", "a") as f:
+        #     json.dump(json_data, f)
+        #     f.write("\n")
+        return(json_data)
 
 detection = ObjectDetection()
 detection.exit_image()
