@@ -4,8 +4,6 @@ from ultralytics import solutions
 import torch
 import datetime
 import logging
-import time
-import json
 import random
 
 logging.basicConfig(
@@ -143,7 +141,6 @@ class ObjectDetection:
                 self.count_of_people = self.process_results(results)
                 # print(f"Количество людей: {self.count_of_people}")
 
-                time.sleep(0.05)
                 # Calculate temperature, ventilation, and lighting
                 self.s += self.calculate_temperature() + " "
                 self.s += self.counting_power_of_vent() + " "
@@ -152,7 +149,7 @@ class ObjectDetection:
                 print(self.save_to_json(self.s))
 
 
-                # logger.info(self.s)
+                logger.info(self.s)
 
                 # Save to JSON file
 

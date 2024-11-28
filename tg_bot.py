@@ -30,7 +30,6 @@ async def run_script_and_update_data(chat_id: int):
         )
         running_processes.append(process)
 
-        # Читаем вывод скрипта построчно
         async for line in process.stdout:
             text = str(line)[2:-3]
             print(text)
@@ -95,7 +94,6 @@ async def stop_script_command(message: Message):
     running_processes.clear()
     await message.answer("Все запущенные скрипты были остановлены.")
 
-# Обработчик команды /data
 @dp.message(Command("data"))
 async def get_data_command(message: Message):
     if latest_data is None:
@@ -103,7 +101,6 @@ async def get_data_command(message: Message):
     else:
         await message.answer(f"Текущие данные:\nТемпература: {latest_data['temperature']}°C\nМощность кондиционера: {latest_data['ventilation']}%\nСила освещения: {latest_data['lighting']}%\nКоличество людей: {latest_data['people']}")
 
-# Команды для получения конкретных данных
 @dp.message(Command("people"))
 async def get_people_command(message: Message):
     people = latest_data.get("people", "Нет данных")
