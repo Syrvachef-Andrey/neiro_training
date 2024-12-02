@@ -1,2 +1,0 @@
-# command for train: yolo task=classify mode=train model=yolo11s-cls.pt data=flowers_prepared epochs=20 imgsz=180
-# command for detect image: yolo task=classify mode=predict model=best.pt source="img.png"
