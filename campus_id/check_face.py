@@ -1,7 +1,6 @@
 import cv2
 import time
 import face_recognition
-import os
 from pathlib import Path
 
 # Функция для захвата изображения с камеры
@@ -35,7 +34,7 @@ def capture_image():
     cv2.destroyAllWindows()
 
     if last_frame is not None:
-        save_path = "/home/andrey/tank_AI/neiro_training/database/some_photo.jpg"
+        save_path = "/home/andrey/tank_AI/neiro_training/campus_id/database/some_photo.jpg"
         cv2.imwrite(save_path, last_frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
         print(f"Фото сохранено по пути: {save_path}")
         return save_path
@@ -74,7 +73,7 @@ def main():
         return
 
     # Путь к директории с базой данных изображений
-    database_dir = Path("/home/andrey/tank_AI/neiro_training/database")
+    database_dir = Path("/home/andrey/tank_AI/neiro_training/campus_id/database")
 
     # Перебираем все изображения в директории
     for image_path in database_dir.glob("*.jpg"):
