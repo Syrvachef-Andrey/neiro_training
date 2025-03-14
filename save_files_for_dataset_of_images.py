@@ -24,7 +24,6 @@ def capture_and_save_image(filename):
             return
 
         cv2.imshow('Video', frame)
-        # cv2.imshow('frame',gray)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.imwrite(f"./dataset/{filename}", frame)
             messagebox.showinfo("Успех", f"Изображение сохранено как {filename}")
@@ -34,24 +33,32 @@ def capture_and_save_image(filename):
     cv2.destroyAllWindows()
 
 # Функция для обработки ввода и вызова захвата изображения
-def on_submit():
+def on_submit(entry):
     filename = entry.get()  # Получаем название файла из поля ввода
     capture_and_save_image(filename)
 
-# Создаем графический интерфейс
-root = tk.Tk()
-root.title("Сохранение изображения с камеры")
+def save_image_global():
+    # Создаем графический интерфейс
+    root = tk.Tk()
+    root.title("Сохранение изображения с камеры")
 
-# Поле ввода для названия файла
-label = tk.Label(root, text="Введите название свое ФИО:")
-label.pack(pady=10)
+    # Поле ввода для названия файла
+    label = tk.Label(root, text="Введите название свое ФИО:")
+    label.pack(pady=10)
 
-entry = tk.Entry(root, width=40)
-entry.pack(pady=10)
+    entry = tk.Entry(root, width=40)
+    entry.pack(pady=10)
 
-# Кнопка для запуска захвата и сохранения
-submit_button = tk.Button(root, text="Для сохранения изображение введите ФИО, нажмите на эту кнопку, а когда вам подойдет изображение нажмите q", command=on_submit)
-submit_button.pack(pady=10)
+    # Кнопка для запуска захвата и сохранения
+    submit_button = tk.Button(
+        root,
+        text="Для сохранения изображение введите имя и фамилию, нажмите на эту кнопку, а когда вам подойдет изображение нажмите q",
+        command=lambda: on_submit(entry)  # Передаем entry в on_submit
+    )
+    submit_button.pack(pady=10)
 
+    root.mainloop()
 
-root.mainloop()
+# Если этот файл запущен как основной, вызываем функцию
+if __name__ == "__main__":
+    save_image_global()
