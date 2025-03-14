@@ -63,7 +63,6 @@ def compare_faces(image1_path, image2_path):
         messagebox.showinfo("Результат", "Совпадение найдено! Это один и тот же человек.")
         return True
     else:
-        messagebox.showinfo("Результат", "Совпадение не найдено.")
         return False
 
 # Функция для отображения изображений в tkinter
@@ -73,8 +72,8 @@ def show_images(image1_path, image2_path):
     image2 = Image.open(image2_path)
 
     # Масштабируем изображения (опционально)
-    image1 = image1.resize((250, 250), Image.ANTIALIAS)
-    image2 = image2.resize((250, 250), Image.ANTIALIAS)
+    image1 = image1.resize((500, 500), Image.LANCZOS)
+    image2 = image2.resize((500, 500), Image.LANCZOS)
 
     # Конвертируем в формат, подходящий для tkinter
     tk_image1 = ImageTk.PhotoImage(image1)
@@ -110,13 +109,11 @@ def main():
             print(f"Найдено совпадение с изображением: {image_path}")
             show_images(image_path, captured_image_path)  # Показываем оба изображения
             break
-    else:
-        messagebox.showinfo("Результат", "Совпадений не найдено.")
 
 # Создаём главное окно tkinter
 root = Tk()
 root.title("Сравнение лиц")
-root.geometry("600x400")
+root.geometry("1000x1000")
 
 # Запускаем основной код
 main()
