@@ -3,13 +3,13 @@ import tkinter as tk
 from tkinter import messagebox
 
 # Функция для захвата и сохранения изображения
-def capture_and_save_image(filename):
+def capture_and_save_image(filename, root):
     if not filename:
         messagebox.showwarning("Ошибка", "Название файла не введено!")
         return
 
     filename = filename.split()
-    filename = filename[0] + "_" + filename[1] + "_" + filename[2] + ".jpg"
+    filename = filename[0] + "_" + filename[1] + ".jpg"
 
     # Захват изображения с камеры
     cap = cv2.VideoCapture(0)
@@ -25,17 +25,18 @@ def capture_and_save_image(filename):
 
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.imwrite(f"./dataset/{filename}", frame)
+            cv2.imwrite(f"/home/andrey/PycharmProjects/neiro_training/database/{filename}", frame)
             messagebox.showinfo("Успех", f"Изображение сохранено как {filename}")
+            root.destroy()
             break
 
     cap.release()
     cv2.destroyAllWindows()
 
 # Функция для обработки ввода и вызова захвата изображения
-def on_submit(entry):
+def on_submit(entry, root):
     filename = entry.get()  # Получаем название файла из поля ввода
-    capture_and_save_image(filename)
+    capture_and_save_image(filename, root)
 
 def save_image_global():
     # Создаем графический интерфейс
@@ -43,7 +44,7 @@ def save_image_global():
     root.title("Сохранение изображения с камеры")
 
     # Поле ввода для названия файла
-    label = tk.Label(root, text="Введите название свое ФИО:")
+    label = tk.Label(root, text="Введите Имя и Фамилию через пробел:")
     label.pack(pady=10)
 
     entry = tk.Entry(root, width=40)
@@ -53,7 +54,7 @@ def save_image_global():
     submit_button = tk.Button(
         root,
         text="Для сохранения изображение введите имя и фамилию, нажмите на эту кнопку, а когда вам подойдет изображение нажмите q",
-        command=lambda: on_submit(entry)  # Передаем entry в on_submit
+        command=lambda: on_submit(entry, root)  # Передаем entry в on_submit
     )
     submit_button.pack(pady=10)
 
