@@ -7,7 +7,7 @@ from torch.autograd import Variable
 from progress.bar import IncrementalBar
 import pandas as pd
 
-from model.test.main_test import NeuralNetwork
+from model import NeuralNetwork
 
 # Создаем собственный класс Dataset
 class CustomDataset(Dataset):
@@ -27,8 +27,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 epochs = 500
 
 if __name__ == "__main__":
-    dataset_xlsx = pd.ExcelFile("/home/andrey/PycharmProjects/oil_repository/data_directory/data.xlsx")
-    dataset_raw = dataset_xlsx.parse("Лист1")
+    dataset_xlsx = pd.ExcelFile("/home/andrey/tank_AI/neiro_training/climat_neiro_network/dataset.xlsx")
+    dataset_raw = dataset_xlsx.parse("dataset")
 
     # Перенос модели на GPU
     model = NeuralNetwork().to(device)
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     print(f"Trained time = {round(time() - st, 2)} секунд")
 
     # Сохранение модели
-    torch.save(model.state_dict(), "/home/andrey/PycharmProjects/oil_repository/trained_data/test/model.pt")
+    torch.save(model.state_dict(), "/home/andrey/tank_AI/neiro_training/climat_neiro_network/test/model.pt")
 
     # Визуализация и сохранение графика
     model.eval()
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     predictions = predictions * (labels_max - labels_min) + labels_min
     labels_original = labels.numpy() * (labels_max - labels_min) + labels_min
 
-    with open("/home/andrey/PycharmProjects/oil_repository/trained_data/test/predicted_data.txt", "w", encoding="utf-8") as file:
+    with open("/home/andrey/tank_AI/neiro_training/climat_neiro_network/test/predicted_data.txt", "w", encoding="utf-8") as file:
         print("Предсказанные значения | Реальные значения")
         print("-----------------------------------------")
         file.write("Предсказанные значения | Реальные значения\n")
@@ -124,5 +124,5 @@ if __name__ == "__main__":
     plt.grid(True)
 
     # Сохранение графика
-    plt.savefig("/home/andrey/PycharmProjects/oil_repository/trained_data/test/graph.png")
+    plt.savefig("/home/andrey/tank_AI/neiro_training/climat_neiro_network/test/graph.png")
     plt.show()
