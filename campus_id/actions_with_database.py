@@ -53,7 +53,7 @@ def fill_random_data(num_records=50):
             country = "Russia"
         else:
             country = random.choice(countries)  # Случайная страна
-        path_to_photography = f"/dataset/{name_surname.replace(' ', '_')}.jpg"  # Случайный путь к фото
+        path_to_photography = f"/home/andrey/tank_AI/neiro_training/campus_id/database/{name_surname.replace(' ', '_')}.jpg"
         speciality = random.choice(code_of_specialities)  # Случайная специальность
 
         # Добавляем запись в базу данных
@@ -96,7 +96,7 @@ def add_record_gui():
     root.title("Добавление записи")
 
     # Поля ввода
-    tk.Label(root, text="Имя Фамилия:").grid(row=0, column=0, padx=10, pady=5)
+    tk.Label(root, text="Имя Фамилия на англ. языке:").grid(row=0, column=0, padx=10, pady=5)
     entry_name_surname = tk.Entry(root, width=30)
     entry_name_surname.grid(row=0, column=1, padx=10, pady=5)
 
@@ -104,15 +104,15 @@ def add_record_gui():
     entry_date_of_born = tk.Entry(root, width=30)
     entry_date_of_born.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Статус:").grid(row=2, column=0, padx=10, pady=5)
+    tk.Label(root, text="Статус (Student, Admin, Guest, Teacher):").grid(row=2, column=0, padx=10, pady=5)
     entry_status = tk.Entry(root, width=30)
     entry_status.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Страна:").grid(row=3, column=0, padx=10, pady=5)
+    tk.Label(root, text="Страна на англ. языке:").grid(row=3, column=0, padx=10, pady=5)
     entry_country = tk.Entry(root, width=30)
     entry_country.grid(row=3, column=1, padx=10, pady=5)
 
-    tk.Label(root, text="Специальность:").grid(row=4, column=0, padx=10, pady=5)
+    tk.Label(root, text="Код специальности в формате (**.**.**):").grid(row=4, column=0, padx=10, pady=5)
     entry_speciality = tk.Entry(root, width=30)
     entry_speciality.grid(row=4, column=1, padx=10, pady=5)
 

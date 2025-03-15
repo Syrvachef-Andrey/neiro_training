@@ -24,7 +24,7 @@ class CustomDataset(Dataset):
 # Определяем устройство (GPU или CPU)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-epochs = 500
+epochs = 3000
 
 if __name__ == "__main__":
     dataset_xlsx = pd.ExcelFile("/home/andrey/tank_AI/neiro_training/climat_neiro_network/dataset.xlsx")
@@ -33,10 +33,13 @@ if __name__ == "__main__":
     # Перенос модели на GPU
     model = NeuralNetwork().to(device)
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.04, weight_decay=0.001)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-    inputs = torch.tensor(dataset_raw.values[:, 0:4].astype(np.float32))  # Используем float32
-    labels = torch.tensor(dataset_raw.values[:, 4:5].astype(np.float32))  # Используем float32
+    inputs = torch.tensor(dataset_raw.values[:, 0:5].astype(np.float32))  # Используем float32
+    labels = torch.tensor(dataset_raw.values[:, 5:6].astype(np.float32))  # Используем float32
+
+    print(inputs)
+    print(labels)
 
     # Нормализация данных
     inputs_min = inputs.min(dim=0, keepdim=True).values
@@ -67,7 +70,7 @@ if __name__ == "__main__":
             outputs = model(batch_inputs)
 
             # Обратное распространение и оптимизация
-            loss = torch.nn.functional.l1_loss(outputs, batch_labels)
+            loss = torch.nn.functional.huber_loss(outputs, batch_labels)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()

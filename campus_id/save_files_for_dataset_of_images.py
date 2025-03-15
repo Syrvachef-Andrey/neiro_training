@@ -25,7 +25,7 @@ def capture_and_save_image(filename, root):
 
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.imwrite(f"/home/andrey/PycharmProjects/neiro_training/database/{filename}", frame)
+            cv2.imwrite(f"/home/andrey/tank_AI/neiro_training/campus_id/database/{filename}", frame)
             messagebox.showinfo("Успех", f"Изображение сохранено как {filename}")
             root.destroy()
             break
